@@ -15,9 +15,11 @@ import java.util.Random;
  */
 
 public class PlayState extends State {
+    public static final int MARGIN = 5;
 
     private Texture bg;
     private Array<Block> left, right;
+    private Block nextLeft, nextRight;
     private Random random;
 
     public PlayState(GameStateManager gsm) {
@@ -26,17 +28,21 @@ public class PlayState extends State {
 
         bg = new Texture("bg.png");
 
+        random = new Random();
+
         left = new Array<Block>();
         right = new Array<Block>();
-
-        random = new Random();
+        nextLeft = new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8);
+        nextRight = new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8);
     }
 
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
-            left.add(new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8));
-            right.add(new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8));
+            left.add(nextLeft);
+            right.add(nextRight);
+            nextLeft = new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8);
+            nextRight = new Block((int) cam.viewportHeight, random.nextInt(4), (int) cam.viewportWidth / 8);
         }
     }
 
@@ -54,11 +60,20 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
+
+        // Draw background
         sb.draw(bg, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2);
+
+        // Draw next blocks
+        sb.draw(nextLeft.getTexture(), MARGIN * 2, MARGIN * 4, cam.viewportWidth / 2 - MARGIN * 5, cam.viewportWidth / 8);
+        sb.draw(nextRight.getTexture(), cam.position.x + MARGIN*3, MARGIN * 4, cam.viewportWidth / 2 - MARGIN * 5, cam.viewportWidth / 8);
+
+        // Draw block stacks
         for (Block block : left)
-            sb.draw(block.getTexture(), -10, block.getY(), cam.viewportWidth / 2, cam.viewportWidth / 8);
+            sb.draw(block.getTexture(), -MARGIN, block.getY(), cam.viewportWidth / 2, cam.viewportWidth / 8);
         for (Block block : right)
-            sb.draw(block.getTexture(), cam.position.x+10, block.getY(), cam.viewportWidth / 2, cam.viewportWidth / 8);
+            sb.draw(block.getTexture(), cam.position.x + MARGIN, block.getY(), cam.viewportWidth / 2, cam.viewportWidth / 8);
+
         sb.end();
     }
 

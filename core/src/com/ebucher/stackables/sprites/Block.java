@@ -3,6 +3,7 @@ package com.ebucher.stackables.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.ebucher.stackables.states.PlayState;
 
 import java.util.HashMap;
 
@@ -33,13 +34,13 @@ public class Block {
     }
 
     public void update(float dt, int intendedPos) {
-        if (y != intendedPos * height) {
+        if (y != intendedPos * height + height + PlayState.MARGIN*8) {
             vel += GRAVITY * dt;
             y += vel;
         }
 
-        if (y < intendedPos * height) {
-            y = intendedPos * height;
+        if (y < intendedPos * height + height + PlayState.MARGIN*8) {
+            y = intendedPos * height + height + PlayState.MARGIN*8;
             vel = 0;
         }
     }
