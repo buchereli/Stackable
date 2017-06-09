@@ -72,7 +72,10 @@ public class BlockStack {
     }
 
     public void removeCompleted() {
-        stack.removeIf(b -> b.getAlpha() <= 0);
+        for(int i = stack.size()-1; i >= 0; i--)
+            if(stack.get(i).getAlpha() <= 0)
+                stack.remove(i);
+//        stack.removeIf(b -> b.getAlpha() <= 0);
     }
 
     public void placeBlock(Vector2 touchEvent, int id) {
