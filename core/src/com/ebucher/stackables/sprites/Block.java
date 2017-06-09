@@ -1,6 +1,7 @@
 package com.ebucher.stackables.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.ebucher.stackables.global.G;
@@ -54,7 +55,7 @@ public class Block {
         return (y == intendedPos * height + bottom);
     }
 
-    public Texture getTexture() {
+    public TextureRegion getTexture() {
         return BlockTextures.blockTextures.get(id);
     }
 

@@ -1,7 +1,10 @@
 package com.ebucher.stackables.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -10,19 +13,16 @@ import java.util.HashMap;
 
 public class BlockTextures {
 
-    public static HashMap<Integer, Texture> blockTextures;
+    private static final int NUMBER_OF_BLOCKS = 4;
+    public static Array<TextureRegion> blockTextures;
 
     static {
-        blockTextures = new HashMap<Integer, Texture>();
-        blockTextures.put(0, new Texture("block_dark_blue.png"));
-        blockTextures.put(1, new Texture("block_dark_orange.png"));
-        blockTextures.put(2, new Texture("block_light_blue.png"));
-        blockTextures.put(3, new Texture("block_light_orange.png"));
-    }
+        blockTextures = new Array<TextureRegion>(NUMBER_OF_BLOCKS);
+        TextureRegion region = new TextureRegion(new Texture("blocks.png"));
+        int blockWidth = region.getRegionWidth();
+        int blockHeight = region.getRegionHeight() / NUMBER_OF_BLOCKS;
+        for (int i = 0; i < NUMBER_OF_BLOCKS; i++)
+            blockTextures.add(new TextureRegion(region, 0, i * blockHeight, blockWidth, blockHeight));
 
-    public static void dispose() {
-        for (Texture texture : blockTextures.values())
-            texture.dispose();
     }
-
 }

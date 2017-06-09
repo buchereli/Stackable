@@ -39,9 +39,9 @@ public class BlockStack {
         for (int i = 0; i < stack.size(); i++) {
             if (id != stack.get(i).getID() || !stack.get(i).settled(i)) {
                 if (count >= 3) {
-                    if(count == 3)
+                    if (count == 3)
                         score += 3;
-                    if(count == 4)
+                    if (count == 4)
                         score += 5;
                     while (count > 0) {
                         indexes.add(i - count);
@@ -109,4 +109,7 @@ public class BlockStack {
         stack.add(new Block((int) touchEvent.y + G.BLOCK_HEIGHT / 2, id));
     }
 
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
 }

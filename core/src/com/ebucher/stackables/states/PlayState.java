@@ -4,18 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.ebucher.stackables.StackablesMain;
 import com.ebucher.stackables.global.G;
-import com.ebucher.stackables.sprites.Block;
-import com.ebucher.stackables.sprites.BlockStack;
 import com.ebucher.stackables.sprites.BlockTextures;
 import com.ebucher.stackables.sprites.NextBlocks;
-
-import java.util.ArrayList;
-import java.util.Random;
+import com.ebucher.stackables.sprites.StackManager;
 
 /**
  * Created by buche on 6/8/2017.
@@ -23,7 +16,6 @@ import java.util.Random;
 
 public class PlayState extends State implements InputProcessor {
     private Texture bg;
-    private BlockStack leftStack, rightStack;
     private int score;
 
     public PlayState(GameStateManager gsm) {
@@ -33,8 +25,6 @@ public class PlayState extends State implements InputProcessor {
 
         bg = new Texture("bg.png");
 
-        leftStack = new BlockStack(0);
-        rightStack = new BlockStack((int) cam.position.x + G.MARGIN);
         NextBlocks.set();
 
         Gdx.input.setInputProcessor(this);
@@ -49,13 +39,7 @@ public class PlayState extends State implements InputProcessor {
     public void update(float dt) {
         handleInput();
 
-        leftStack.update(dt);
-        rightStack.update(dt);
-        int tempScore = score;
-        score += leftStack.scoreStack();
-        score += rightStack.scoreStack();
-        if(tempScore != score)
-            System.out.println(score);
+        StackManager.update(dt);
     }
 
     @Override
@@ -69,15 +53,14 @@ public class PlayState extends State implements InputProcessor {
         NextBlocks.render(sb, (int) cam.position.x);
 
         // Draw block stacks
-        leftStack.render(sb);
-        rightStack.render(sb);
+        StackManager.render(sb);
 
         sb.end();
     }
 
     @Override
     public void dispose() {
-        BlockTextures.dispose();
+        bg.dispose();
     }
 
     @Override
@@ -106,9 +89,7 @@ public class PlayState extends State implements InputProcessor {
         if (touchEvent.y < NextBlocks.HEIGHT) {
             NextBlocks.swap();
         } else {
-            leftStack.placeBlock(touchEvent, NextBlocks.left());
-            rightStack.placeBlock(touchEvent, NextBlocks.right());
-
+            StackManager.placeBlocks(touchEvent);
             NextBlocks.set();
         }
 
