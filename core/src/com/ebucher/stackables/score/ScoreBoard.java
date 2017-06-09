@@ -1,5 +1,7 @@
 package com.ebucher.stackables.score;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -27,8 +29,10 @@ public class ScoreBoard {
         line = new Texture("line.png");
 
         scoreLayout = new GlyphLayout();
-        font = new BitmapFont();
-        font.getData().setScale(10f);
+        font = new BitmapFont(Gdx.files.internal("arvo-regular.fnt"));
+        font.getData().setScale(2f);
+        Color grey = new Color(1f, .4f, 0f, 1f);
+        font.setColor(grey);
 
         score = 0;
     }

@@ -12,7 +12,7 @@ import com.ebucher.stackables.score.ScoreBoard;
 
 public class StackManager {
 
-    public static final int HEIGHT = Block.BLOCK_HEIGHT * 9;
+    public static final int HEIGHT = Block.BLOCK_HEIGHT * 10;
 
     private static com.ebucher.stackables.stacks.BlockStack leftStack, rightStack;
 
