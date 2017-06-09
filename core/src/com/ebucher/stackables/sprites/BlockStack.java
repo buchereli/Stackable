@@ -1,5 +1,6 @@
 package com.ebucher.stackables.sprites;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.ebucher.stackables.global.G;
@@ -21,35 +22,40 @@ public class BlockStack {
     }
 
     public void render(SpriteBatch sb) {
-        for (Block block : stack)
+        for (Block block : stack) {
+            sb.setColor(1, 1, 1, block.getAlpha());
             sb.draw(block.getTexture(), x, block.getY(), G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
+        }
+        sb.setColor(1, 1, 1, 1f);
     }
 
     public void update(float dt) {
         for (int i = 0; i < stack.size(); i++)
             stack.get(i).update(dt, i);
+
+        removeCompleted();
     }
 
     public int scoreStack() {
         int count = 0;
         int score = 0;
         int id = -1;
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
-
         for (int i = 0; i < stack.size(); i++) {
-            if (id != stack.get(i).getID() || !stack.get(i).settled(i)) {
+            if (id != stack.get(i).getID() || !stack.get(i).settled(i) || stack.get(i).fading()) {
                 if (count >= 3) {
                     if (count == 3)
                         score += 3;
                     if (count == 4)
                         score += 5;
                     while (count > 0) {
-                        indexes.add(i - count);
+                        stack.get(i - count).fade();
                         count--;
                     }
                 }
-                if (!stack.get(i).settled(i))
-                    break;
+                if (!stack.get(i).settled(i) || stack.get(i).fading()) {
+                    count = 0;
+                    continue;
+                }
                 id = stack.get(i).getID();
                 count = 1;
             } else
@@ -58,19 +64,15 @@ public class BlockStack {
 
         if (count >= 3)
             while (count > 0) {
-                indexes.add(stack.size() - count);
+                stack.get(stack.size() - count).fade();
                 count--;
             }
-
-        removeAll(indexes);
 
         return score;
     }
 
-    private void removeAll(ArrayList<Integer> indexes) {
-        for (int i = stack.size() - 1; i >= 0; i--)
-            if (indexes.contains(i))
-                stack.remove(i);
+    public void removeCompleted() {
+        stack.removeIf(b -> b.getAlpha() <= 0);
     }
 
     public void placeBlock(Vector2 touchEvent, int id) {

@@ -1,69 +1,85 @@
 package com.ebucher.stackables.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.ebucher.stackables.global.G;
-import com.ebucher.stackables.states.PlayState;
-
-import java.util.HashMap;
 
 /**
  * Created by buche on 6/8/2017.
  */
 
 public class Block {
-    private int bottom;
     private static final float GRAVITY = -25;
-    private static final int height = G.BLOCK_HEIGHT;
+    private static final float FADE_RATE = -2f;
+    private static final int BLOCK_HEIGHT = G.BLOCK_HEIGHT;
+    private static final int NEXT_BLOCKS_HEIGHT = NextBlocks.HEIGHT;
+
     private int id;
     private int y;
     private float vel;
+    private boolean fade;
+    private float alpha;
 
-    public Block(int y, int id) {
+    Block(int y, int id) {
         this.y = y;
         this.id = id;
-        this.bottom = height + G.MARGIN * 8;
+        this.vel = 0;
+        this.fade = false;
+        this.alpha = 1.0f;
     }
 
-    public void update(float dt, int intendedPos) {
-        if (y != intendedPos * height + bottom) {
-            vel += GRAVITY * dt;
-            y += vel;
-        }
+    void update(float dt, int intendedPos) {
+        if (fade)
+            alpha += FADE_RATE * dt;
+        else {
+            if (y != intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT) {
+                vel += GRAVITY * dt;
+                y += vel;
+            }
 
-        if (y < intendedPos * height + bottom) {
-            y = intendedPos * height + bottom;
-            vel = 0;
+            if (y < intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT) {
+                y = intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT;
+                vel = 0;
+            }
         }
     }
 
-    public void setVel(float vel) {
+    void fade() {
+        fade = true;
+    }
+
+    boolean fading() {
+        return fade;
+    }
+
+    float getAlpha() {
+        return alpha;
+    }
+
+    void setVel(float vel) {
         this.vel = vel;
     }
 
-    public float getVel() {
+    float getVel() {
         return vel;
     }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public boolean settled(int intendedPos) {
-        return (y == intendedPos * height + bottom);
+    boolean settled(int intendedPos) {
+        return (y == intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT);
     }
 
-    public TextureRegion getTexture() {
+    TextureRegion getTexture() {
         return BlockTextures.blockTextures.get(id);
     }
 
-    public int getID() {
+    int getID() {
         return id;
     }
 
-    public Block setY(int y) {
+    Block setY(int y) {
         this.y = y;
         return this;
     }
