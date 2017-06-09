@@ -1,4 +1,4 @@
-package com.ebucher.stackables.sprites;
+package com.ebucher.stackables.stacks;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ebucher.stackables.global.G;
@@ -7,11 +7,10 @@ import com.ebucher.stackables.global.G;
  * Created by buche on 6/8/2017.
  */
 
-public class Block {
+class Block {
     private static final float GRAVITY = -25;
     private static final float FADE_RATE = -2f;
-    private static final int BLOCK_HEIGHT = G.BLOCK_HEIGHT;
-    private static final int NEXT_BLOCKS_HEIGHT = NextBlocks.HEIGHT;
+    public static final int BLOCK_HEIGHT = G.BLOCK_HEIGHT;
 
     private int id;
     private int y;
@@ -31,13 +30,13 @@ public class Block {
         if (fade)
             alpha += FADE_RATE * dt;
         else {
-            if (y != intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT) {
+            if (y != intendedPos * BLOCK_HEIGHT) {
                 vel += GRAVITY * dt;
                 y += vel;
             }
 
-            if (y < intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT) {
-                y = intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT;
+            if (y < intendedPos * BLOCK_HEIGHT) {
+                y = intendedPos * BLOCK_HEIGHT;
                 vel = 0;
             }
         }
@@ -68,7 +67,7 @@ public class Block {
     }
 
     boolean settled(int intendedPos) {
-        return (y == intendedPos * BLOCK_HEIGHT + NEXT_BLOCKS_HEIGHT);
+        return (y == intendedPos * BLOCK_HEIGHT);
     }
 
     TextureRegion getTexture() {

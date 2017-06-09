@@ -3,12 +3,14 @@ package com.ebucher.stackables.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.ebucher.stackables.global.G;
-import com.ebucher.stackables.sprites.BlockTextures;
-import com.ebucher.stackables.sprites.NextBlocks;
-import com.ebucher.stackables.sprites.StackManager;
+import com.ebucher.stackables.next.NextBlocks;
+import com.ebucher.stackables.score.ScoreBoard;
+import com.ebucher.stackables.stacks.BlockTextures;
+import com.ebucher.stackables.stacks.StackManager;
 
 /**
  * Created by buche on 6/8/2017.
@@ -16,7 +18,6 @@ import com.ebucher.stackables.sprites.StackManager;
 
 public class PlayState extends State implements InputProcessor {
     private Texture bg;
-    private int score;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -55,12 +56,17 @@ public class PlayState extends State implements InputProcessor {
         // Draw block stacks
         StackManager.render(sb);
 
+        // Draw score board
+        ScoreBoard.render(sb);
+
         sb.end();
     }
 
     @Override
     public void dispose() {
         bg.dispose();
+        BlockTextures.dispose();
+        ScoreBoard.dispose();
     }
 
     @Override

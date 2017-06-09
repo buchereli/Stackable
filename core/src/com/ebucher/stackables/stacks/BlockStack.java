@@ -1,9 +1,9 @@
-package com.ebucher.stackables.sprites;
+package com.ebucher.stackables.stacks;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.ebucher.stackables.global.G;
+import com.ebucher.stackables.next.NextBlocks;
 
 import java.util.ArrayList;
 
@@ -11,32 +11,32 @@ import java.util.ArrayList;
  * Created by buche on 6/9/2017.
  */
 
-public class BlockStack {
+class BlockStack {
 
     private ArrayList<Block> stack;
     private int x;
 
-    public BlockStack(int x) {
+    BlockStack(int x) {
         stack = new ArrayList<Block>();
         this.x = x;
     }
 
-    public void render(SpriteBatch sb) {
+    void render(SpriteBatch sb) {
         for (Block block : stack) {
             sb.setColor(1, 1, 1, block.getAlpha());
-            sb.draw(block.getTexture(), x, block.getY(), G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
+            sb.draw(block.getTexture(), x, block.getY() + NextBlocks.HEIGHT, G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
         }
         sb.setColor(1, 1, 1, 1f);
     }
 
-    public void update(float dt) {
+    void update(float dt) {
         for (int i = 0; i < stack.size(); i++)
             stack.get(i).update(dt, i);
 
         removeCompleted();
     }
 
-    public int scoreStack() {
+    int scoreStack() {
         int count = 0;
         int score = 0;
         int id = -1;
@@ -62,23 +62,28 @@ public class BlockStack {
                 count++;
         }
 
-        if (count >= 3)
+        if (count >= 3) {
+            if (count == 3)
+                score += 3;
+            if (count == 4)
+                score += 5;
             while (count > 0) {
                 stack.get(stack.size() - count).fade();
                 count--;
             }
+        }
 
         return score;
     }
 
-    public void removeCompleted() {
-        for(int i = stack.size()-1; i >= 0; i--)
-            if(stack.get(i).getAlpha() <= 0)
+    void removeCompleted() {
+        for (int i = stack.size() - 1; i >= 0; i--)
+            if (stack.get(i).getAlpha() <= 0)
                 stack.remove(i);
 //        stack.removeIf(b -> b.getAlpha() <= 0);
     }
 
-    public void placeBlock(Vector2 touchEvent, int id) {
+    void placeBlock(Vector2 touchEvent, int id) {
         for (int i = 0; i < stack.size(); i++) {
             float distance = stack.get(i).getY() + G.BLOCK_HEIGHT / 2 - touchEvent.y;
             if (stack.get(i).settled(i)) {
@@ -111,10 +116,10 @@ public class BlockStack {
             }
         }
 
-        stack.add(new Block((int) touchEvent.y + G.BLOCK_HEIGHT / 2, id));
+        stack.add(new Block((int) touchEvent.y - G.BLOCK_HEIGHT / 2, id));
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return stack.isEmpty();
     }
 }

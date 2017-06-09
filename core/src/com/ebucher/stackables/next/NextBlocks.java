@@ -1,7 +1,8 @@
-package com.ebucher.stackables.sprites;
+package com.ebucher.stackables.next;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ebucher.stackables.global.G;
+import com.ebucher.stackables.stacks.BlockTextures;
 
 import java.util.Random;
 
