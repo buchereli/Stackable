@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 public class Block {
     private static HashMap<Integer, Texture> blockTextures;
+    private int bottom;
     private static final float GRAVITY = -25;
     private int id;
     private int y;
@@ -31,22 +32,27 @@ public class Block {
         this.y = y;
         this.id = id;
         this.height = height;
+        this.bottom = height + PlayState.MARGIN * 8;
     }
 
     public void update(float dt, int intendedPos) {
-        if (y != intendedPos * height + height + PlayState.MARGIN*8) {
+        if (y != intendedPos * height + bottom) {
             vel += GRAVITY * dt;
             y += vel;
         }
 
-        if (y < intendedPos * height + height + PlayState.MARGIN*8) {
-            y = intendedPos * height + height + PlayState.MARGIN*8;
+        if (y < intendedPos * height + bottom) {
+            y = intendedPos * height + bottom;
             vel = 0;
         }
     }
 
     public int getY() {
         return y;
+    }
+
+    public boolean settled(int intendedPos) {
+        return (y == intendedPos * height + bottom);
     }
 
     public Texture getTexture() {
@@ -58,4 +64,16 @@ public class Block {
             texture.dispose();
     }
 
+    public int getID() {
+        return id;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Block setY(int y) {
+        this.y = y;
+        return this;
+    }
 }
