@@ -48,7 +48,8 @@ public class PlayState extends State implements InputProcessor {
         sb.begin();
 
         // Draw background
-        sb.draw(bg, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2);
+        sb.draw(bg, cam.position.x - cam.viewportWidth / 2, cam.position.y - cam.viewportHeight / 2,
+                cam.viewportWidth, cam.viewportHeight);
 
         // Draw next blocks
         NextBlocks.render(sb, (int) cam.position.x);

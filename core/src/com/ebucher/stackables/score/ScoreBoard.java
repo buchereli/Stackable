@@ -16,7 +16,8 @@ import com.ebucher.stackables.stacks.StackManager;
 
 public class ScoreBoard {
 
-    public static int BOTTOM = NextBlocks.HEIGHT + StackManager.HEIGHT;
+    private static final int BOTTOM = NextBlocks.HEIGHT + StackManager.HEIGHT;
+    private static final int HEIGHT = G.BLOCK_HEIGHT * 2;
     private final static BitmapFont font;
 
     private static Texture line;
@@ -30,7 +31,12 @@ public class ScoreBoard {
 
         scoreLayout = new GlyphLayout();
         font = new BitmapFont(Gdx.files.internal("arvo-regular.fnt"));
-        font.getData().setScale(2f);
+        for (float scale = 4f; scale > .5f; scale -= .5f) {
+            font.getData().setScale(scale);
+            scoreLayout.setText(font, score + "");
+            if (scoreLayout.height < HEIGHT - G.MARGIN * 6)
+                break;
+        }
         Color grey = new Color(1f, .4f, 0f, 1f);
         font.setColor(grey);
 
