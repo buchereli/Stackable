@@ -32,11 +32,11 @@ public class ScoreBoard {
         bg = new Texture("bg.png");
 
         scoreLayout = new GlyphLayout();
-        font = new BitmapFont(Gdx.files.internal("arvo-regular.fnt"));
+        font = new BitmapFont(Gdx.files.internal("Rockwell.fnt"));
         for (float scale = 4f; scale > .5f; scale -= .5f) {
             font.getData().setScale(scale);
             scoreLayout.setText(font, score + "");
-            if (scoreLayout.height < HEIGHT - G.MARGIN * 2)
+            if (scoreLayout.height < HEIGHT - G.MARGIN * 8)
                 break;
         }
         Color grey = new Color(1f, .4f, 0f, 1f);
