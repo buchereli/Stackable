@@ -17,7 +17,7 @@ public class BlockTextures {
     public static Array<TextureRegion> blockTextures;
     private static Texture blocks;
 
-    static {
+    public BlockTextures() {
         blockTextures = new Array<TextureRegion>(NUMBER_OF_BLOCKS);
         blocks = new Texture("blocks.png");
         TextureRegion region = new TextureRegion(blocks);
@@ -25,7 +25,6 @@ public class BlockTextures {
         int blockHeight = region.getRegionHeight() / NUMBER_OF_BLOCKS;
         for (int i = 0; i < NUMBER_OF_BLOCKS; i++)
             blockTextures.add(new TextureRegion(region, 0, i * blockHeight, blockWidth, blockHeight));
-
     }
 
     public static void dispose(){

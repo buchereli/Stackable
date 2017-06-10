@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ebucher.stackables.states.GameStateManager;
+import com.ebucher.stackables.states.MenuMainState;
 import com.ebucher.stackables.states.PlayState;
 
 public class StackablesMain extends ApplicationAdapter {
@@ -23,7 +24,7 @@ public class StackablesMain extends ApplicationAdapter {
         music.setVolume(1.0F);
         music.play();
         Gdx.gl.glClearColor(1, 0, 0, 1);
-        gsm.push(new PlayState(gsm));
+        gsm.push(new MenuMainState(gsm));
     }
 
     @Override

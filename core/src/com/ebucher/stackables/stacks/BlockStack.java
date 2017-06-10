@@ -21,11 +21,21 @@ class BlockStack {
         this.x = x;
     }
 
-    void render(SpriteBatch sb) {
+    void render(SpriteBatch sb, float shiftAbove) {
         for (Block block : stack) {
+            // Set draw color to blocks alpha
             sb.setColor(1, 1, 1, block.getAlpha());
-            sb.draw(block.getTexture(), x, block.getY() + NextBlocks.HEIGHT, G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
+
+            // If block if above touch then shift it up by margin
+            if (shiftAbove != -1 && block.getY() + G.BLOCK_HEIGHT / 2 > shiftAbove)
+                sb.draw(block.getTexture(), x, block.getY() + NextBlocks.HEIGHT + G.MARGIN * 2
+                        , G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
+            else
+                sb.draw(block.getTexture(), x, block.getY() + NextBlocks.HEIGHT,
+                        G.BLOCK_WIDTH, G.BLOCK_HEIGHT);
         }
+
+        // Reset draw alpha to 1
         sb.setColor(1, 1, 1, 1f);
     }
 
@@ -43,10 +53,7 @@ class BlockStack {
         for (int i = 0; i < stack.size(); i++) {
             if (id != stack.get(i).getID() || !stack.get(i).settled(i) || stack.get(i).fading()) {
                 if (count >= 3) {
-                    if (count == 3)
-                        score += 3;
-                    if (count == 4)
-                        score += 5;
+                    score += scoreCount(count);
                     while (count > 0) {
                         stack.get(i - count).fade();
                         count--;
@@ -63,10 +70,7 @@ class BlockStack {
         }
 
         if (count >= 3) {
-            if (count == 3)
-                score += 3;
-            if (count == 4)
-                score += 5;
+            score += scoreCount(count);
             while (count > 0) {
                 stack.get(stack.size() - count).fade();
                 count--;
@@ -76,11 +80,20 @@ class BlockStack {
         return score;
     }
 
-    void removeCompleted() {
+    private int scoreCount(int count) {
+        if (count == 3)
+            return 3;
+        if (count == 4)
+            return 5;
+
+        return 0;
+    }
+
+    private void removeCompleted() {
+//        stack.removeIf(b -> b.getAlpha() <= 0);
         for (int i = stack.size() - 1; i >= 0; i--)
             if (stack.get(i).getAlpha() <= 0)
                 stack.remove(i);
-//        stack.removeIf(b -> b.getAlpha() <= 0);
     }
 
     void placeBlock(Vector2 touchEvent, int id) {
@@ -121,5 +134,16 @@ class BlockStack {
 
     boolean isEmpty() {
         return stack.isEmpty();
+    }
+
+    // If stack is over MAX_STACK and no blocks are fading then gameOver = true
+    boolean gameOver() {
+        if (stack.size() > StackManager.MAX_STACK) {
+            for (Block block : stack)
+                if (block.fading())
+                    return false;
+            return true;
+        }
+        return false;
     }
 }

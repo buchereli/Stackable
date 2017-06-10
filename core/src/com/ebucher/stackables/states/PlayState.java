@@ -28,6 +28,10 @@ public class PlayState extends State implements InputProcessor {
 
         NextBlocks.set();
 
+        new StackManager();
+        new BlockTextures();
+        new ScoreBoard();
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -41,6 +45,8 @@ public class PlayState extends State implements InputProcessor {
         handleInput();
 
         StackManager.update(dt);
+        if (StackManager.gameOver())
+            gsm.set(new MenuMainState(gsm));
     }
 
     @Override
@@ -87,11 +93,15 @@ public class PlayState extends State implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        StackManager.setShiftAbove(Math.max(-1, cam.viewportHeight - screenY - NextBlocks.HEIGHT));
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        StackManager.setShiftAbove(-1);
+
         Vector2 touchEvent = new Vector2(screenX, cam.viewportHeight - screenY);
         if (touchEvent.y < NextBlocks.HEIGHT) {
             NextBlocks.swap();
@@ -105,6 +115,8 @@ public class PlayState extends State implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        StackManager.setShiftAbove(Math.max(-1, cam.viewportHeight - screenY - NextBlocks.HEIGHT));
+
         return false;
     }
 

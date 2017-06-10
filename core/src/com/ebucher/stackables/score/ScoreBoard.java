@@ -17,24 +17,26 @@ import com.ebucher.stackables.stacks.StackManager;
 public class ScoreBoard {
 
     private static final int BOTTOM = NextBlocks.HEIGHT + StackManager.HEIGHT;
-    private static final int HEIGHT = G.BLOCK_HEIGHT * 2;
-    private final static BitmapFont font;
+    private static final int HEIGHT = G.HEIGHT - BOTTOM; //G.BLOCK_HEIGHT * 2;
+    private static BitmapFont font;
 
     private static Texture line;
+    private static Texture bg;
     private static int score;
 
     private static GlyphLayout scoreLayout;
 
 
-    static {
+    public ScoreBoard() {
         line = new Texture("line.png");
+        bg = new Texture("bg.png");
 
         scoreLayout = new GlyphLayout();
         font = new BitmapFont(Gdx.files.internal("arvo-regular.fnt"));
         for (float scale = 4f; scale > .5f; scale -= .5f) {
             font.getData().setScale(scale);
             scoreLayout.setText(font, score + "");
-            if (scoreLayout.height < HEIGHT - G.MARGIN * 6)
+            if (scoreLayout.height < HEIGHT - G.MARGIN * 2)
                 break;
         }
         Color grey = new Color(1f, .4f, 0f, 1f);
@@ -48,6 +50,7 @@ public class ScoreBoard {
     }
 
     public static void render(SpriteBatch sb) {
+        sb.draw(bg, 0, BOTTOM, G.WIDTH, HEIGHT);
         sb.draw(line, 0, BOTTOM, G.WIDTH, G.MARGIN);
         scoreLayout.setText(font, score + "");
         float scoreX = (G.WIDTH - scoreLayout.width) / 2;
@@ -57,6 +60,7 @@ public class ScoreBoard {
 
     public static void dispose() {
         line.dispose();
+        bg.dispose();
         font.dispose();
     }
 

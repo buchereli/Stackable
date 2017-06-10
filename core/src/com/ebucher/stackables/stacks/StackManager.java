@@ -12,13 +12,16 @@ import com.ebucher.stackables.score.ScoreBoard;
 
 public class StackManager {
 
-    public static final int HEIGHT = Block.BLOCK_HEIGHT * 10;
+    public static final int MAX_STACK = 10;
+    public static final int HEIGHT = Block.BLOCK_HEIGHT * MAX_STACK;
 
-    private static com.ebucher.stackables.stacks.BlockStack leftStack, rightStack;
+    private static BlockStack leftStack, rightStack;
+    private static float shiftAbove;
 
-    static {
-        leftStack = new com.ebucher.stackables.stacks.BlockStack(0);
-        rightStack = new com.ebucher.stackables.stacks.BlockStack(G.CENTER + G.MARGIN);
+    public StackManager() {
+        leftStack = new BlockStack(0);
+        rightStack = new BlockStack(G.CENTER + G.MARGIN);
+        shiftAbove = -1;
     }
 
     public static void update(float dt) {
@@ -31,15 +34,22 @@ public class StackManager {
         ScoreBoard.addPoints(points);
     }
 
-    public static void render(SpriteBatch sb){
-        leftStack.render(sb);
-        rightStack.render(sb);
+    public static boolean gameOver() {
+        return (leftStack.gameOver() || rightStack.gameOver());
     }
 
-    public static void placeBlocks(Vector2 touchEvent){
+    public static void render(SpriteBatch sb) {
+        leftStack.render(sb, shiftAbove);
+        rightStack.render(sb, shiftAbove);
+    }
+
+    public static void placeBlocks(Vector2 touchEvent) {
         touchEvent.y -= NextBlocks.HEIGHT;
         leftStack.placeBlock(touchEvent, NextBlocks.left());
         rightStack.placeBlock(touchEvent, NextBlocks.right());
     }
 
+    public static void setShiftAbove(float y) {
+        shiftAbove = y;
+    }
 }

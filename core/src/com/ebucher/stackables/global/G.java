@@ -12,7 +12,7 @@ public class G {
 
     public static void init(int width, int height) {
         MARGIN = width / 100;
-        BLOCK_HEIGHT = (height - MARGIN * 2) / 13;
+        BLOCK_HEIGHT = (height - MARGIN * 8) / 13;
         BLOCK_WIDTH = width / 2 - MARGIN;
         CENTER = width / 2;
         HEIGHT = height;
